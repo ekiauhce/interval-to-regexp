@@ -43,7 +43,7 @@ def get_minutes(start: str, end: str):
 
     i_start_mins = int(start_mins)
     i_end_mins = int(end_mins)
-    result = get_minutes(f'{start_mins}:{start_secs}', f'{start_mins}:59')
+    result = get_minutes(start, f'{start_mins}:59')
     if i_start_mins < 59 and i_end_mins > 0 and i_end_mins - i_start_mins > 1:
         result += '|' + get_minutes(f'{i_start_mins+1:02d}:00', f'{i_end_mins-1:02d}:59')
     result += '|' + get_minutes(f'{end_mins}:00', end)
