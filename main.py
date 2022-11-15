@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import re
 import argparse
+from datetime import datetime
 
 def time(x: str):
     if re.match(r'([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]', x):
@@ -34,10 +35,15 @@ def get_minutes(start: str, end: str):
     start_mins, start_secs = start.split(':')
     end_mins, end_secs = end.split(':')
 
-
-    if start_mins == end_mins:
-        if start_secs == '00' and end_secs == '59':
-            return f'{start_mins}:[0-5][0-9]'
+    is_secs_full_range = start_secs == '00' and end_secs == '59'
+    if start_mins == end_mins and is_secs_full_range:
+        return f'{start_mins}:[0-5][0-9]'
+    elif is_secs_full_range:
+        # Actually get_seconds is abstract regex generator for any
+        # two digit numbers already in the valid interval, so
+        # we can reuse this method here to get minutes part
+        return f'({get_seconds(start_mins, end_mins)}):[0-5][0-9]'
+    elif start_mins == end_mins:
         return f'{start_mins}:({get_seconds(start_secs, end_secs)})'
 
 
@@ -85,6 +91,11 @@ def get_hours(start: str, end: str):
     return result
 
 def main(args):
+    start_dt = datetime.strptime(args.start, '%H:%M:%S')
+    end_dt = datetime.strptime(args.end, '%H:%M:%S')
+    if start_dt > end_dt:
+        parser.error(f"--from can't be greater than --end. Got {args.start} and {args.end}")
+
     result = get_hours(args.start, args.end)
     print(f'({result})')
 
