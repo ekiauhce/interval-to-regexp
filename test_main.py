@@ -28,7 +28,6 @@ class RegexpUsageTest(TestCase):
                 actual = len(re.findall(regexp, day_seconds))
                 diff = datetime.strptime(end, '%H:%M:%S') - datetime.strptime(start, '%H:%M:%S')
                 expected = diff.total_seconds() + 1
-
                 self.assertEqual(expected, actual, regexp)
 
 if __name__ == '__main__':

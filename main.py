@@ -24,6 +24,8 @@ def get_seconds(start: str, end: str):
 
     if start_div == end_div:
         return f'{start_div}[{start_rem}-{end_rem}]'
+    elif start_rem == 0 and end_rem == 9:
+        return f'[{start_div}-{end_div}][0-9]'
 
     return f'{start_div}[{start_rem}-9]' + '|' + get_seconds(f'{start_div+1}0', end)
 
